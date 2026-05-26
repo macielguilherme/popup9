@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Exclusão Definitiva - DocZ</title>
+    <style>
+        /* ===== RESET E BASE ===== */
+        html, body {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background: #fafafa;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #595959;
+            font-size: 12px;
+        }
+
+        /* ===== BACKDROP ===== */
+        #popup-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        /* ===== MODAL PRINCIPAL ===== */
+        .ui-dialog {
+            background: #585858;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 480px;
+            max-width: 95%;
+        }
+
+        /* ===== TITLEBAR LEGADA ===== */
+        .ui-dialog-titlebar {
+            background: url("https://docz.sosdocs.com.br/Docz/app/images/backgrounds/titleBg.png") repeat-x 0 0;
+            border-bottom: 1px solid #cdcdcd;
+            height: 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .ui-dialog-title {
+            font-weight: bold;
+            color: #595959;
+            font-size: 12px;
+        }
+
+        .close-x {
+            text-decoration: none;
+            color: #595959;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .close-x:hover {
+            color: #000;
+        }
+
+        /* ===== CONTEÚDO DA MODAL ===== */
+        .ui-dialog-content {
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* ===== ÁREA DE MENSAGENS E ALERTAS ===== */
+        .message-box {
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #444;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .attention-bold {
+            font-weight: bold;
+            color: #9f352b;
+            margin-top: 10px;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        /* MENSAGEM DE ERRO CRÍTICA LEGADA */
+        .status-erro {
+            color: #9f352b;
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 15px;
+            display: none;
+            border: 1px dashed #9f352b;
+            padding: 8px;
+            background: #fff1f0;
+            text-align: left;
+        }
+
+        /* ===== FORMULÁRIOS ADMINISTRATIVOS ===== */
+        .form-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #595959;
+            font-size: 11px;
+        }
+
+        .form-group input {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #bdbdbd;
+            background: #fff;
+            font-size: 12px;
+            padding: 6px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+            border-radius: 1px;
+        }
+
+        .form-group input:focus {
+            border-color: #2e6691;
+            outline: none;
+        }
+
+        /* ===== RODAPÉ E BOTÕES ===== */
+        .button-wrapper {
+            text-align: right;
+            border-top: 1px double #ccc;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .button {
+            font-size: 11px;
+            font-weight: bold;
+            background-image: url("https://docz.sosdocs.com.br/Docz/app/images/ui/usualButtons.png");
+            background-repeat: repeat-x;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 8px 20px;
+            border-radius: 2px;
+            color: #fff;
+            display: inline-block;
+            border: none;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-left: 8px;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .button:active {
+            opacity: 0.8;
+        }
+
+        /* POSICIONAMENTO SPRITE USUALBUTTONS */
+        .greenB { background-position: 0 -425px; border: 1px solid #7ca82a; }
+        .redB { background-position: 0 -170px; border: 1px solid #9f352b; }
+    </style>
+</head>
+<body>
+
+<div id="popup-backdrop">
+    <div id="modal-exclusao" class="ui-dialog">
+        <div class="ui-dialog-titlebar">
+            <span class="ui-dialog-title">Confirmação de Exclusão Definitiva</span>
+            <a href="javascript:void(0)" onclick="fecharPopup()" class="close-x">✖</a>
+        </div>
+
+        <div class="ui-dialog-content">
+            <div id="erro-credenciais" class="status-erro">
+                Aviso: Usuário ou Senha incorretos. Autenticação administrativa falhou.
+            </div>
+
+            <div class="message-box">
+                <p>A exclusão definitiva removerá permanentemente a Caixa 20 KG, Caixa Box ou Documentos selecionada.</p>
+                <p class="attention-bold">ATENÇÃO: Esta ação não poderá ser desfeita.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="input-usuario">USUÁRIO *</label>
+                <input type="text" id="input-usuario" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="input-senha">SENHA *</label>
+                <input type="password" id="input-senha">
+            </div>
+
+            <div class="button-wrapper">
+                <button class="button redB" onclick="fecharPopup()">Cancelar</button>
+                <button class="button greenB" onclick="confirmarExclusao()">Confirmar Exclusão</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmarExclusao() {
+        const usuarioInput = document.getElementById("input-usuario").value.trim();
+        const senhaInput = document.getElementById("input-senha").value.trim();
+        const erroDiv = document.getElementById("erro-credenciais");
+
+        // Regra de validação simulada corporativa (Campos não podem ser vazios)
+        // Simulando que credenciais válidas seriam admin/admin para o protótipo
+        if (usuarioInput.toLowerCase() === "admin" && senhaInput === "admin") {
+            erroDiv.style.display = "none";
+            alert("Exclusão realizada com sucesso! Os objetos foram removidos permanentemente do banco do DocZ.");
+            fecharPopup();
+        } else {
+            // Comportamento técnico de falha exigido: exibe erro, limpa senha e não fecha janela
+            erroDiv.style.display = "block";
+            document.getElementById("input-senha").value = "";
+            document.getElementById("input-senha").focus();
+        }
+    }
+
+    function fecharPopup() {
+        // Reseta campos ao sair/cancelar
+        document.getElementById("input-usuario").value = "";
+        document.getElementById("input-senha").value = "";
+        document.getElementById("erro-credenciais").style.display = "none";
+        
+        // Simulação do fechamento do backdrop do sistema
+        document.getElementById("popup-backdrop").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
